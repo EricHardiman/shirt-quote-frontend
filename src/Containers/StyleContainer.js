@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import StyleList from '../Components/StyleList'
 
 class StyleContainer extends Component {
@@ -7,11 +8,16 @@ class StyleContainer extends Component {
   }
 
   componentDidMount() {
-    fetch(`${this.props.apiUrl}/styles`)
-      .then(res => res.json())
-      .then(data => {
-        this.setState({shirts: data})
-      })
+    window.scrollTo(0, 0)
+    if (!localStorage.getItem("token")){
+      return <Redirect to='/'/>
+    } else {
+      fetch(`${this.props.apiUrl}/styles`)
+        .then(res => res.json())
+        .then(data => {
+          this.setState({shirts: data})
+        })
+    }
   }
 
   render() {

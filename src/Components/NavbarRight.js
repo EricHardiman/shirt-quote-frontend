@@ -8,11 +8,11 @@ const NavbarRight = (props) => {
     localStorage.getItem("token") === null ?
       (
         <Fragment>
-          <div class="item">
-            <a class="ui button" href="/register">Sign Up</a>
+          <div className="item">
+            <a className="ui button" href="/register">Sign Up</a>
           </div>
-          <div class="item">
-            <a class="ui green button" href="/login">Log In</a>
+          <div className="item">
+            <a className="ui green button" href="/login">Log In</a>
           </div>
         </Fragment>
       ) :

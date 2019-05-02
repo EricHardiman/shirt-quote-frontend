@@ -29,7 +29,7 @@ class Register extends Component {
         }
         else {
           localStorage.setItem("token", data.token);
-          this.setState({username: data.username,});
+          this.setState({username: data.username,}, () => this.props.dispatch({type: "login"}));
         }
       });
   }

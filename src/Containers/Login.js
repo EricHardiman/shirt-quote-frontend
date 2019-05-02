@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form, Grid, Segment, Message } from 'semantic-ui-react';
 import { Redirect, withRouter } from "react-router-dom";
+import {connect} from 'react-redux';
 
 class Login extends Component {
   state = {
@@ -24,7 +25,7 @@ class Login extends Component {
         }
         else {
           localStorage.setItem("token", data.token);
-          this.setState({ username: data.username });
+          this.setState({ username: data.username }, () => this.props.dispatch({type: "login"}));
         }
       });
   }
@@ -83,4 +84,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login)
+export default withRouter(connect()(Login))
