@@ -1,18 +1,17 @@
-import React, { Fragment } from 'react'
-import { withRouter } from 'react-router-dom'
+import React, { Fragment } from "react";
+import { withRouter } from "react-router-dom";
 
 const UserQuotes = props => {
-
   const clickHandler = props => {
-    props.history.push(`/quotes/${props.quote.quote_number}`)
-  }
-  console.log(props.quote)
+    props.history.push(`/quotes/${props.quote.quote_number}`);
+  };
+  console.log(props.quote);
 
-  return(
+  return (
     <Fragment>
       <h1 onClick={() => clickHandler(props)}>{props.quote.quote_number}</h1>
     </Fragment>
-  )
-}
+  );
+};
 
-export default withRouter(UserQuotes)
+export default withRouter(UserQuotes);
