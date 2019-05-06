@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Redirect } from "react-router-dom";
 import StyleList from "../Components/StyleList";
+import Sidebar from "../Components/Sidebar";
 
 class StyleContainer extends Component {
   state = {
@@ -22,7 +23,10 @@ class StyleContainer extends Component {
 
   render() {
     return (
-      <StyleList handleClick={this.handleClick} shirts={this.state.shirts} />
+      <Fragment>
+        <StyleList handleClick={this.handleClick} shirts={this.state.shirts} />
+        <Sidebar />
+      </Fragment>
     );
   }
 }
