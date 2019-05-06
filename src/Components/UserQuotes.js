@@ -6,6 +6,7 @@ const UserQuotes = props => {
   const clickHandler = props => {
     props.history.push(`/quotes/${props.quote.quote_number}`)
   }
+  console.log(props.quote)
 
   return(
     <Fragment>

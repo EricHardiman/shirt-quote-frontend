@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Button, Form } from 'semantic-ui-react'
-import { withRouter, Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import {connect} from 'react-redux';
 import Navbar from "./Navbar";
 
@@ -21,9 +21,11 @@ class QuotePage extends Component {
     sizes: "",
     front: "",
     back: "",
-    color: "black",
+    color: "",
     status: "Pending",
+    shirt_type: "",
     user_id: null,
+    images: [],
     quote_number: Math.floor(Math.random() * 900000) + 100000,
   }
 
@@ -32,12 +34,29 @@ class QuotePage extends Component {
     this.setState({
       user_id: JWT.verify(localStorage.getItem("token"), 'secret').user_id,
       front: this.props.selectedShirt.front,
-      back: this.props.selectedShirt.back
+      back: this.props.selectedShirt.back,
+      color: this.props.selectedShirt.starting_color,
+      shirt_type: this.props.selectedShirt.name
     })
   }
 
   changeHandler = (ev) => {
     this.setState({[ev.target.name]: ev.target.value})
+  }
+
+  openWidget = () => {
+    window.cloudinary.createUploadWidget(
+      {
+        cloudName: process.env.REACT_APP_CLOUD_NAME,
+        uploadPreset: process.env.REACT_APP_CLOUD_PRESET
+      },
+      (error, result) => {
+        if (result && result.event === "success") {
+          this.setState({
+            images: this.state.images.concat(result.info.url)
+          })
+        }
+    }).open()
   }
 
   submitHandler = () => {
@@ -53,7 +72,26 @@ class QuotePage extends Component {
         quote: this.state
       })
     })
-      .then(this.props.history.push('/quotes'))
+      .then(res => res.json())
+      .then(data => {
+        this.state.images.map(url =>
+          fetch(`${this.props.apiUrl}/images`, {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+              accepts: "application/json",
+              authorization: token
+            },
+            body: JSON.stringify({
+              image: {
+                quote_id: data.id,
+                url: url
+              }
+            })
+          })
+            .then(this.props.history.push('/quotes'))
+        )
+      })
   }
 
   render() {
@@ -62,7 +100,7 @@ class QuotePage extends Component {
         <Navbar/>
         <main style={{ marginLeft: '4em'}}>
           <div className="quote-form">
-            <Form onSubmit={this.submitHandler}>
+            <Form>
               <Form.Group grouped>
                 <Form.Input label='Full Name' width={5} name="full_name" value={this.state.full_name} onChange={this.changeHandler}/>
                 <Form.Input label='Organization Name' width={5} name="org_name" value={this.state.org_name} onChange={this.changeHandler}/>
@@ -73,7 +111,16 @@ class QuotePage extends Component {
                 <Form.Input label='Zip Code' width={5} name="zipcode" value={this.state.zipcode} onChange={this.changeHandler}/>
                 <Form.Input label='Country' width={5} name="country" value={this.state.country} onChange={this.changeHandler}/>
                 <Form.Input type="email" label='Email Address' width={5} name="email" value={this.state.email} onChange={this.changeHandler}/>
-                  <Form.TextArea
+                <Form.Input attached readOnly label="Logo/Image Upload"  width={5} value={this.state.images.length + ' Image(s) selected'}/>
+                <Button
+                  positive
+                  className="upload-button"
+                  attached="bottom"
+                  icon="upload"
+                  content="Upload Images/Logo"
+                  onClick={this.openWidget}
+                />
+                <Form.TextArea
                     label="Sizes"
                     placeholder="Please list all sizes and quantities needed! Adult and Youth sizes are available in most styles!  Additional fees may apply to sizes 2XL and up."
                     name="sizes"
@@ -81,7 +128,7 @@ class QuotePage extends Component {
                     value={this.state.sizes}
                     onChange={this.changeHandler}
                   />
-                  <Form.TextArea
+                <Form.TextArea
                     label="Additional Notes"
                     placeholder="Specific brand, additional print locations Etc.."
                     name="notes"
@@ -89,7 +136,7 @@ class QuotePage extends Component {
                     value={this.state.notes}
                     onChange={this.changeHandler}
                   />
-                <Button primary type="submit" name="submit">Submit Your Quote!</Button>
+                <Button primary onClick={this.submitHandler}>Submit Your Quote!</Button>
               </Form.Group>
             </Form>
           </div>

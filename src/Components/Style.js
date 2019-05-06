@@ -11,7 +11,6 @@ const Style = (props) => {
   return (
     <main style={{marginLeft: "auto", marginRight: "auto"}}>
       <Card onClick={() => clickHandler(props)}>
-        <Image className="example-img" src={props.shirt.manufacture.logo}/>
         <Image className="example-img" src={props.shirt.front}/>
         <Card.Content>
           <Card.Header>{props.shirt.name}</Card.Header>

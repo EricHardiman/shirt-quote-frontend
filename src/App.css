@@ -41,6 +41,22 @@
   height:auto;
 }
 
+.upload-button{
+  width: 340px;
+}
+
+.left-half {
+  float: left;
+  width: 50%;
+  height: 14px;
+}
+
+.right-half {
+  float: right;
+  width: 50%;
+  height: 14px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

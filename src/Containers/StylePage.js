@@ -9,6 +9,7 @@ class StylePage extends Component {
 
   state = {
     selectedStyle: []
+
   }
 
   convert = require('color-convert')
@@ -31,9 +32,11 @@ class StylePage extends Component {
     this.props.history.push('/new_quote/selected')
   }
 
-  colorClickHandle = () => {
+  colorClickHandle = (color) => {
     const prevState = {...this.state.selectedStyle}
-    prevState.front = "https://www.nextlevelapparel.com/media/catalog/product/cache/1/image/1800x/040ec09b1e35df139433887a97daa66f/6/1/6110-BLACK-F_7.jpg"
+    prevState.front = color.front
+    prevState.back = color.back
+    prevState.starting_color = color.actual_color
     this.setState({selectedStyle: prevState})
   }
 
@@ -65,8 +68,14 @@ class StylePage extends Component {
               <Card.Description>Sizes Available: {this.state.selectedStyle.size}</Card.Description>
             </Card.Content>
             <Card.Content extra>
-              <div className="color-box" style={{backgroundColor: 'lightgreen'}} onClick={this.colorClickHandle}></div>
-              <div className="color-box" style={{backgroundColor: 'blue'}}></div>
+              {this.state.selectedStyle.colors ? this.state.selectedStyle.colors.map(color => (
+                !color.multi ?
+                <div className="color-box" style={{backgroundColor: color.name}} onClick={() => this.colorClickHandle(color)}></div> :
+                  <div onClick={() => this.colorClickHandle(color)} className="color-box">
+                    <div className="left-half" style={{backgroundColor: color.name}} >&nbsp;</div>
+                    <div className="right-half" style={{backgroundColor: color.name2}}>&nbsp;</div>
+                  </div>
+              )):null}
             </Card.Content>
           </Card>
           <Button primary onClick={this.submitHandle}>Start Your Quote!</Button>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Button, Form, Grid, Message, Segment} from 'semantic-ui-react';
 import { Redirect, withRouter } from "react-router-dom";
+import {connect} from 'react-redux';
 
 class Register extends Component {
   state = {
@@ -92,4 +93,4 @@ class Register extends Component {
   }
 }
 
-export default withRouter(Register)
+export default withRouter(connect()(Register))

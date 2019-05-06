@@ -35,7 +35,7 @@ class Navbar extends Component {
 
   render() {
     return (
-      <main style={{marginBottom: '3em'}}>
+      <main style={{marginBottom: '5em'}}>
        <header>
          <div className="ui fixed inverted menu" style={this.props.style}>
            <div className="ui container">
