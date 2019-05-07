@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import Style from "./Style";
 import { Card } from "semantic-ui-react";
-import Navbar from "../Containers/Navbar";
+import Navbar from "../containers/Navbar";
 
 const StyleList = props => {
   return (

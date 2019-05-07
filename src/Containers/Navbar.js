@@ -2,7 +2,7 @@ import React, { Fragment, Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
-import NavbarRight from "../Components/NavbarRight";
+import NavbarRight from "../components/NavbarRight";
 
 class Navbar extends Component {
   logout = () => {

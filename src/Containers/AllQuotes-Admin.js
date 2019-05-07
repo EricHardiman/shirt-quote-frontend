@@ -2,7 +2,7 @@ import React, { Fragment, Component } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Navbar from "./Navbar";
-import AllQuotesList from "../Components/AllQuotesList-Admin";
+import AllQuotesList from "../components/AllQuotesList-Admin";
 
 class AllQuotes extends Component {
   state = {

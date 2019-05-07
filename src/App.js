@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
-import Register from "./Containers/Register";
-import Login from "./Containers/Login";
-import Home from "./Containers/Home";
-import Quotes from "./Containers/Quotes";
-import StylePage from "./Containers/StylePage";
-import StyleContainer from "./Containers/StyleContainer";
-import QuoteShowPage from "./Containers/QuoteShowPage";
-import AllQuotes from "./Containers/AllQuotes-Admin";
-import EditQuotePage from "./Containers/EditQuotePage";
+import Register from "./containers/Register";
+import Login from "./containers/Login";
+import Home from "./containers/Home";
+import Quotes from "./containers/Quotes";
+import StylePage from "./containers/StylePage";
+import StyleContainer from "./containers/StyleContainer";
+import QuoteShowPage from "./containers/QuoteShowPage";
+import AllQuotes from "./containers/AllQuotes-Admin";
+import EditQuotePage from "./containers/EditQuotePage";
 import "./App.css";
 
 const API_URL = "http://localhost:3000/api/v1";

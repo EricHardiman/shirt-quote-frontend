@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./Navbar";
-import UserQuotesList from "../Components/UserQuotesList";
+import UserQuotesList from "../components/UserQuotesList";
 const JWT = require("jsonwebtoken");
 
 class Quotes extends Component {

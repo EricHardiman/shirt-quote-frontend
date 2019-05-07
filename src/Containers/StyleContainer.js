@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Redirect } from "react-router-dom";
-import StyleList from "../Components/StyleList";
-import Sidebar from "../Components/Sidebar";
+import StyleList from "../components/StyleList";
+import Sidebar from "../components/Sidebar";
 
 class StyleContainer extends Component {
   state = {
