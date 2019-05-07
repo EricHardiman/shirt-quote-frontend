@@ -6,7 +6,6 @@ import Home from "./Containers/Home";
 import Quotes from "./Containers/Quotes";
 import StylePage from "./Containers/StylePage";
 import StyleContainer from "./Containers/StyleContainer";
-import QuotePage from "./Containers/QuotePage";
 import QuoteShowPage from "./Containers/QuoteShowPage";
 import AllQuotes from "./Containers/AllQuotes-Admin";
 import EditQuotePage from "./Containers/EditQuotePage";
@@ -23,10 +22,6 @@ class App extends Component {
         <Route
           path="/new_quote/style/:id"
           render={() => <StylePage apiUrl={API_URL} />}
-        />
-        <Route
-          path="/new_quote/selected"
-          render={() => <QuotePage apiUrl={API_URL} />}
         />
         <Route
           path="/new_quote"

@@ -32,12 +32,20 @@ class QuotePage extends Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     this.setState({
-      user_id: JWT.verify(localStorage.getItem("token"), "secret").user_id,
-      front: this.props.selectedShirt.front,
-      back: this.props.selectedShirt.back,
-      color: this.props.selectedShirt.starting_color,
-      shirt_type: this.props.selectedShirt.name
+      user_id: JWT.verify(localStorage.getItem("token"), "secret").user_id
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { selectedShirt } = this.props;
+    if (prevProps.selectedShirt !== selectedShirt) {
+      this.setState({
+        front: selectedShirt.front,
+        back: selectedShirt.back,
+        color: selectedShirt.color,
+        shirt_type: selectedShirt.name
+      });
+    }
   }
 
   changeHandler = ev => {
@@ -51,7 +59,7 @@ class QuotePage extends Component {
           cloudName: process.env.REACT_APP_CLOUD_NAME,
           uploadPreset: process.env.REACT_APP_CLOUD_PRESET
         },
-        (error, result) => {
+        result => {
           if (result && result.event === "success") {
             this.setState({
               images: this.state.images.concat(result.info.url)

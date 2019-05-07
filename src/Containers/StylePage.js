@@ -1,44 +1,34 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Carousel from "semantic-ui-carousel-react";
-import { Image, Card, Button } from "semantic-ui-react";
+import { Image, Card } from "semantic-ui-react";
 import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./Navbar";
+import QuotePage from "./QuotePage";
 
 class StylePage extends Component {
-  state = {
-    selectedStyle: []
-  };
-
-  convert = require("color-convert");
-
   elements = [
     {
       render: () => {
-        return <Image src={this.state.selectedStyle.front} />;
+        return <Image src={this.props.selectedShirt.front} />;
       }
     },
     {
       render: () => {
-        return <Image src={this.state.selectedStyle.back} />;
+        return <Image src={this.props.selectedShirt.back} />;
       }
     }
   ];
 
-  submitHandle = () => {
-    this.props.dispatch({
-      type: "select_shirt",
-      payload: this.state.selectedStyle
-    });
-    this.props.history.push("/new_quote/selected");
-  };
-
   colorClickHandle = color => {
-    const prevState = { ...this.state.selectedStyle };
+    const prevState = { ...this.props.selectedShirt };
     prevState.front = color.front;
     prevState.back = color.back;
     prevState.starting_color = color.actual_color;
-    this.setState({ selectedStyle: prevState });
+    this.props.dispatch({
+      type: "select_shirt",
+      payload: prevState
+    });
   };
 
   componentDidMount() {
@@ -49,7 +39,12 @@ class StylePage extends Component {
       const styleId = this.props.match.params.id;
       fetch(`${this.props.apiUrl}/styles/${styleId}`)
         .then(res => res.json())
-        .then(data => this.setState({ selectedStyle: data }));
+        .then(data =>
+          this.props.dispatch({
+            type: "select_shirt",
+            payload: data
+          })
+        );
     }
   }
 
@@ -65,14 +60,14 @@ class StylePage extends Component {
             showIndicators={true}
           />
           <Card.Content>
-            <Card.Header>{this.state.selectedStyle.name}</Card.Header>
+            <Card.Header>{this.props.selectedShirt.name}</Card.Header>
             <Card.Description>
-              Sizes Available: {this.state.selectedStyle.size}
+              Sizes Available: {this.props.selectedShirt.size}
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
-            {this.state.selectedStyle.colors
-              ? this.state.selectedStyle.colors.map(color =>
+            {this.props.selectedShirt.colors
+              ? this.props.selectedShirt.colors.map(color =>
                   !color.multi ? (
                     <div
                       className="color-box"
@@ -102,12 +97,15 @@ class StylePage extends Component {
               : null}
           </Card.Content>
         </Card>
-        <Button primary onClick={this.submitHandle}>
-          Start Your Quote!
-        </Button>
+        <QuotePage apiUrl={this.props.apiUrl} />
       </Fragment>
     );
   }
 }
 
-export default withRouter(connect()(StylePage));
+const mapStateToProps = state => {
+  return {
+    selectedShirt: state.selectedShirt
+  };
+};
+export default withRouter(connect(mapStateToProps)(StylePage));

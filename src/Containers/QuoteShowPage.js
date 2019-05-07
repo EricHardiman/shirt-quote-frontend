@@ -58,7 +58,8 @@ class QuoteShowPage extends Component {
           ) {
             return (
               <Fragment>
-                <h1>{this.state.quote.sizes}</h1>
+                <h1>{this.state.quote.shirt_type}</h1>
+                <h2>{this.state.quote.color}</h2>
                 <h1>Attached Files</h1>
                 <Card.Group itemsPerRow={6}>
                   {this.state.quote.images.map(image => (
