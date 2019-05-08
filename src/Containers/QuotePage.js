@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, Form } from "semantic-ui-react";
+import { Button, Form, Card } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Navbar from "./Navbar";
@@ -59,7 +59,7 @@ class QuotePage extends Component {
           cloudName: process.env.REACT_APP_CLOUD_NAME,
           uploadPreset: process.env.REACT_APP_CLOUD_PRESET
         },
-        result => {
+        (error, result) => {
           if (result && result.event === "success") {
             this.setState({
               images: this.state.images.concat(result.info.url)
@@ -106,6 +106,7 @@ class QuotePage extends Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <Fragment>
         <Navbar />
@@ -213,6 +214,19 @@ class QuotePage extends Component {
                 </Button>
               </Form.Group>
             </Form>
+            <Card.Group itemsPerRow={3}>
+              {this.state.images.map(image => (
+                <Fragment>
+                  <div>
+                    <img
+                      style={{ width: "50%" }}
+                      alt="Quote File Attachment"
+                      src={image}
+                    />
+                  </div>
+                </Fragment>
+              ))}
+            </Card.Group>
           </div>
         </main>
       </Fragment>

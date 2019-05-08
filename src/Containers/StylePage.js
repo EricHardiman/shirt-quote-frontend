@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Carousel from "semantic-ui-carousel-react";
-import { Image, Card } from "semantic-ui-react";
+import { Image, Card, Grid, Sticky } from "semantic-ui-react";
 import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./Navbar";
 import QuotePage from "./QuotePage";
@@ -51,53 +51,64 @@ class StylePage extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar />
-        <Card>
-          <Carousel
-            elements={this.elements}
-            animation="fade"
-            showNextPrev={true}
-            showIndicators={true}
-          />
-          <Card.Content>
-            <Card.Header>{this.props.selectedShirt.name}</Card.Header>
-            <Card.Description>
-              Sizes Available: {this.props.selectedShirt.size}
-            </Card.Description>
-          </Card.Content>
-          <Card.Content extra>
-            {this.props.selectedShirt.colors
-              ? this.props.selectedShirt.colors.map(color =>
-                  !color.multi ? (
-                    <div
-                      className="color-box"
-                      style={{ backgroundColor: color.name }}
-                      onClick={() => this.colorClickHandle(color)}
-                    />
-                  ) : (
-                    <div
-                      onClick={() => this.colorClickHandle(color)}
-                      className="color-box"
-                    >
-                      <div
-                        className="left-half"
-                        style={{ backgroundColor: color.name }}
-                      >
-                        &nbsp;
-                      </div>
-                      <div
-                        className="right-half"
-                        style={{ backgroundColor: color.name2 }}
-                      >
-                        &nbsp;
-                      </div>
-                    </div>
-                  )
-                )
-              : null}
-          </Card.Content>
-        </Card>
-        <QuotePage apiUrl={this.props.apiUrl} />
+        <Navbar innerRef={this.contextRef} />
+        <Grid centered columns={2} divided>
+          <Grid.Row>
+            <Grid.Column>
+              <Sticky context={this.contextRef}>
+                <Card>
+                  <Carousel
+                    elements={this.elements}
+                    animation="fade"
+                    showNextPrev={true}
+                    showIndicators={true}
+                  />
+                  <Card.Content>
+                    <Card.Header>{this.props.selectedShirt.name}</Card.Header>
+                    <Card.Description>
+                      Sizes Available: {this.props.selectedShirt.size}
+                    </Card.Description>
+                  </Card.Content>
+                  <Card.Content extra>
+                    {this.props.selectedShirt.colors
+                      ? this.props.selectedShirt.colors.map(color =>
+                          !color.multi ? (
+                            <div
+                              className="color-box"
+                              key={"SomeKey"}
+                              style={{ backgroundColor: color.name }}
+                              onClick={() => this.colorClickHandle(color)}
+                            />
+                          ) : (
+                            <div
+                              onClick={() => this.colorClickHandle(color)}
+                              className="color-box"
+                            >
+                              <div
+                                className="left-half"
+                                style={{ backgroundColor: color.name }}
+                              >
+                                &nbsp;
+                              </div>
+                              <div
+                                className="right-half"
+                                style={{ backgroundColor: color.name2 }}
+                              >
+                                &nbsp;
+                              </div>
+                            </div>
+                          )
+                        )
+                      : null}
+                  </Card.Content>
+                </Card>
+              </Sticky>
+            </Grid.Column>
+            <Grid.Column>
+              <QuotePage apiUrl={this.props.apiUrl} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Fragment>
     );
   }

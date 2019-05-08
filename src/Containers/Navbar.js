@@ -1,41 +1,37 @@
 import React, { Fragment, Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import _ from "lodash";
 import NavbarRight from "../components/NavbarRight";
+import { Menu, Label } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 class Navbar extends Component {
+  state = {
+    allQuotes: []
+  };
+
   logout = () => {
     localStorage.clear();
     this.props.dispatch({ type: "logout" });
     this.props.history.push("/");
   };
 
-  handleSearchChange = (e, { value }) => {
-    const source = this.props.podcasts
-      ? this.props.podcasts
-      : this.props.episodes;
-    this.setState({ isLoading: true, value });
-
-    setTimeout(() => {
-      if (this.state.value.length < 1) return this.resetComponent();
-
-      const re = new RegExp(_.escapeRegExp(this.state.value), "i");
-      const isMatch = result => re.test(result.title);
-      this.setState({
-        isLoading: false,
-        results: _.filter(source, isMatch)
-      });
-    }, 300);
-  };
-
   componentDidMount() {
     if (localStorage.getItem("token")) {
       this.props.dispatch({ type: "admin" });
     }
+    if (this.props.isAdmin && this.props.loggedIn) {
+      fetch(`http://localhost:3000/api/v1/all_quotes`)
+        .then(res => res.json())
+        .then(data => this.setState({ allQuotes: data }));
+    }
   }
 
   render() {
+    const pending = this.state.allQuotes.filter(
+      quote => quote.status === "Pending"
+    );
+
     return (
       <main style={{ marginBottom: "5em" }}>
         <header>
@@ -53,8 +49,9 @@ class Navbar extends Component {
               {/*Admin Navbar*/}
               {this.props.isAdmin && this.props.loggedIn ? (
                 <Fragment>
-                  <a
-                    href="/all_quotes"
+                  <Menu.Item
+                    as={Link}
+                    to="/all_quotes"
                     className={`item ${
                       this.props.history.location.pathname === "/all_quotes"
                         ? "active"
@@ -62,7 +59,21 @@ class Navbar extends Component {
                     }`}
                   >
                     All Quotes
-                  </a>
+                    {pending.length > 0 ? (
+                      <Label color="red">{pending.length}</Label>
+                    ) : null}
+                  </Menu.Item>
+                  <Menu.Item
+                    as={Link}
+                    to="/create_chat"
+                    className={`item ${
+                      this.props.history.location.pathname === "/create_chat"
+                        ? "active"
+                        : null
+                    }`}
+                  >
+                    Start Customer Chat
+                  </Menu.Item>
                 </Fragment>
               ) : null}
 

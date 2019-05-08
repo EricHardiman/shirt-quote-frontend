@@ -9,6 +9,8 @@ import StyleContainer from "./containers/StyleContainer";
 import QuoteShowPage from "./containers/QuoteShowPage";
 import AllQuotes from "./containers/AllQuotes-Admin";
 import EditQuotePage from "./containers/EditQuotePage";
+import MakeChat from "./components/MakeChat";
+import ShowChat from "./components/ShowChat";
 import "./App.css";
 
 const API_URL = "http://localhost:3000/api/v1";
@@ -38,6 +40,11 @@ class App extends Component {
         <Route
           path="/quotes/:id"
           render={() => <QuoteShowPage apiUrl={API_URL} />}
+        />
+        <Route path="/chats/:id" render={() => <ShowChat apiUrl={API_URL} />} />
+        <Route
+          path="/create_chat"
+          render={() => <MakeChat apiUrl={API_URL} />}
         />
         <Route path="/quotes" render={() => <Quotes apiUrl={API_URL} />} />
         <Route path="/" render={() => <Home apiUrl={API_URL} />} />

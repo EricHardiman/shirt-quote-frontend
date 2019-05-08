@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "semantic-ui/dist/semantic.min.css";
+import { ActionCableProvider } from "react-actioncable-provider";
 require("dotenv").config();
 
 const JWT = require("jsonwebtoken");
@@ -40,11 +41,13 @@ function reducer(state = initialState, action) {
 const store = createStore(reducer);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <ActionCableProvider url="ws://localhost:3000/cable">
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </ActionCableProvider>,
   document.getElementById("root")
 );
 
