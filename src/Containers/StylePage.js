@@ -1,12 +1,13 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, createRef } from "react";
 import { connect } from "react-redux";
 import Carousel from "semantic-ui-carousel-react";
-import { Image, Card, Grid, Sticky } from "semantic-ui-react";
+import { Grid, Image, Card, Divider, Popup } from "semantic-ui-react";
 import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./Navbar";
 import QuotePage from "./QuotePage";
 
 class StylePage extends Component {
+  contextRef = createRef();
   elements = [
     {
       render: () => {
@@ -51,64 +52,80 @@ class StylePage extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar innerRef={this.contextRef} />
-        <Grid centered columns={2} divided>
-          <Grid.Row>
-            <Grid.Column>
-              <Sticky context={this.contextRef}>
-                <Card>
-                  <Carousel
-                    elements={this.elements}
-                    animation="fade"
-                    showNextPrev={true}
-                    showIndicators={true}
-                  />
-                  <Card.Content>
-                    <Card.Header>{this.props.selectedShirt.name}</Card.Header>
-                    <Card.Description>
-                      Sizes Available: {this.props.selectedShirt.size}
-                    </Card.Description>
-                  </Card.Content>
-                  <Card.Content extra>
-                    {this.props.selectedShirt.colors
-                      ? this.props.selectedShirt.colors.map(color =>
-                          !color.multi ? (
-                            <div
-                              className="color-box"
-                              key={"SomeKey"}
-                              style={{ backgroundColor: color.name }}
-                              onClick={() => this.colorClickHandle(color)}
-                            />
-                          ) : (
-                            <div
-                              onClick={() => this.colorClickHandle(color)}
-                              className="color-box"
-                            >
+        <Navbar />
+        <Grid columns={2} relaxed="very" stackable>
+          <Grid.Column>
+            <div
+              className="ui center aligned grid"
+              style={{ marginTop: "10rem", position: "fixed", width: "50%" }}
+            >
+              <Card>
+                <Carousel
+                  elements={this.elements}
+                  animation="fade"
+                  showNextPrev={true}
+                  showIndicators={true}
+                />
+                <Card.Content>
+                  <Card.Header>{this.props.selectedShirt.name}</Card.Header>
+                  <Card.Description>
+                    Sizes Available: {this.props.selectedShirt.size}
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  {this.props.selectedShirt.colors
+                    ? this.props.selectedShirt.colors.map(color =>
+                        !color.multi ? (
+                          <Popup
+                            trigger={
                               <div
-                                className="left-half"
+                                className="color-box"
+                                key={"SomeKey"}
                                 style={{ backgroundColor: color.name }}
-                              >
-                                &nbsp;
-                              </div>
+                                onClick={() => this.colorClickHandle(color)}
+                              />
+                            }
+                            inverted
+                            basic
+                            content={color.actual_color}
+                          />
+                        ) : (
+                          <Popup
+                            trigger={
                               <div
-                                className="right-half"
-                                style={{ backgroundColor: color.name2 }}
+                                onClick={() => this.colorClickHandle(color)}
+                                className="color-box"
                               >
-                                &nbsp;
+                                <div
+                                  className="left-half"
+                                  style={{ backgroundColor: color.name }}
+                                >
+                                  &nbsp;
+                                </div>
+                                <div
+                                  className="right-half"
+                                  style={{ backgroundColor: color.name2 }}
+                                >
+                                  &nbsp;
+                                </div>
                               </div>
-                            </div>
-                          )
+                            }
+                            inverted
+                            basic
+                            content={color.actual_color}
+                          />
                         )
-                      : null}
-                  </Card.Content>
-                </Card>
-              </Sticky>
-            </Grid.Column>
-            <Grid.Column>
-              <QuotePage apiUrl={this.props.apiUrl} />
-            </Grid.Column>
-          </Grid.Row>
+                      )
+                    : null}
+                </Card.Content>
+              </Card>
+            </div>
+          </Grid.Column>
+          <Grid.Column>
+            <QuotePage apiUrl={this.props.apiUrl} />
+          </Grid.Column>
         </Grid>
+        <Divider vertical />
       </Fragment>
     );
   }

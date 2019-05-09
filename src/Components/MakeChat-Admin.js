@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import Navbar from "../containers/Navbar";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 const JWT = require("jsonwebtoken");
 
 export class MakeChat extends Component {
@@ -10,7 +12,7 @@ export class MakeChat extends Component {
   };
 
   clickHandler = () => {
-    const userId = JWT.verify(localStorage.getItem("token"), "secret").user_id;
+    const adminId = JWT.verify(localStorage.getItem("token"), "secret").user_id;
     const token = localStorage.getItem("token");
     fetch("http://localhost:3000/api/v1/chats", {
       method: "POST",
@@ -20,15 +22,11 @@ export class MakeChat extends Component {
         authorization: token
       },
       body: JSON.stringify({
-        user_id: userId
+        admin_id: adminId
       })
     })
       .then(res => res.json())
       .then(data => this.props.history.push(`/chats/${data.id}`));
-  };
-
-  roomHandler = room => {
-    this.props.history.push(`/chats/${room.id}`);
   };
 
   componentDidMount() {
@@ -46,16 +44,26 @@ export class MakeChat extends Component {
   }
 
   render() {
-    console.log(this.state.rooms);
-    return (
-      <div>
-        <Navbar />
-        <Button onClick={this.clickHandler}>Cute as a Button</Button>
-        {this.state.rooms.map(room => (
-          <h1 onClick={() => this.roomHandler(room)}>Join this room</h1>
-        ))}
-      </div>
-    );
+    if (!this.props.isAdmin) {
+      return <Redirect to={"/"} />;
+    } else if (this.props.isAdmin) {
+      return (
+        <div>
+          <Navbar />
+          <Button onClick={this.clickHandler}>Cute as a Button</Button>
+          {this.state.rooms.id ? (
+            <h1 onClick={this.clickHandler}>Join this Room</h1>
+          ) : null}
+        </div>
+      );
+    }
   }
 }
-export default withRouter(MakeChat);
+
+const mapStateToProps = state => {
+  return {
+    isAdmin: state.isAdmin,
+    loggedIn: state.loggedIn
+  };
+};
+export default withRouter(connect(mapStateToProps)(MakeChat));

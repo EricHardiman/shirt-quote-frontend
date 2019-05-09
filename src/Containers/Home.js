@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Navbar from "./Navbar";
 
 class Home extends Component {
@@ -33,10 +33,9 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Navbar shirts={this.state.shirts} />
-        <h1>Home Page</h1>
-      </div>
+      </Fragment>
     );
   }
 }

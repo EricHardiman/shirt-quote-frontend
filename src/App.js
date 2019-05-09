@@ -7,9 +7,9 @@ import Quotes from "./containers/Quotes";
 import StylePage from "./containers/StylePage";
 import StyleContainer from "./containers/StyleContainer";
 import QuoteShowPage from "./containers/QuoteShowPage";
-import AllQuotes from "./containers/AllQuotes-Admin";
 import EditQuotePage from "./containers/EditQuotePage";
-import MakeChat from "./components/MakeChat";
+import AllQuotes from "./containers/AllQuotes-Admin";
+import MakeChat from "./components/MakeChat-Admin";
 import ShowChat from "./components/ShowChat";
 import "./App.css";
 

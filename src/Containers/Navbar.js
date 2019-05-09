@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import NavbarRight from "../components/NavbarRight";
 import { Menu, Label } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+const JWT = require("jsonwebtoken");
 
 class Navbar extends Component {
   state = {
@@ -27,13 +27,31 @@ class Navbar extends Component {
     }
   }
 
+  makeRoomHandler = () => {
+    const adminId = JWT.verify(localStorage.getItem("token"), "secret").user_id;
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:3000/api/v1/chats", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        accepts: "application/json",
+        authorization: token
+      },
+      body: JSON.stringify({
+        admin_id: adminId
+      })
+    })
+      .then(res => res.json())
+      .then(data => this.props.history.push(`/chats/${data.id}`));
+  };
+
   render() {
     const pending = this.state.allQuotes.filter(
       quote => quote.status === "Pending"
     );
 
     return (
-      <main style={{ marginBottom: "5em" }}>
+      <main style={{ marginBottom: "3em" }}>
         <header>
           <div className="ui fixed inverted menu" style={this.props.style}>
             <div className="ui container">
@@ -50,8 +68,7 @@ class Navbar extends Component {
               {this.props.isAdmin && this.props.loggedIn ? (
                 <Fragment>
                   <Menu.Item
-                    as={Link}
-                    to="/all_quotes"
+                    href="/all_quotes"
                     className={`item ${
                       this.props.history.location.pathname === "/all_quotes"
                         ? "active"
@@ -63,15 +80,7 @@ class Navbar extends Component {
                       <Label color="red">{pending.length}</Label>
                     ) : null}
                   </Menu.Item>
-                  <Menu.Item
-                    as={Link}
-                    to="/create_chat"
-                    className={`item ${
-                      this.props.history.location.pathname === "/create_chat"
-                        ? "active"
-                        : null
-                    }`}
-                  >
+                  <Menu.Item onClick={this.makeRoomHandler}>
                     Start Customer Chat
                   </Menu.Item>
                 </Fragment>

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Redirect } from "react-router-dom";
 import StyleList from "../components/StyleList";
 import Sidebar from "../components/Sidebar";
+import { Grid } from "semantic-ui-react";
 
 class StyleContainer extends Component {
   state = {
@@ -90,17 +91,25 @@ class StyleContainer extends Component {
   render() {
     return (
       <Fragment>
-        <StyleList
-          handleClick={this.handleClick}
-          shirts={this.state.forFilter}
-        />
-        <Sidebar
-          manufacture={this.manufactureFilter}
-          style={this.styleFilter}
-          size={this.sizeFilter}
-          gender={this.genderFilter}
-          age={this.ageFilter}
-        />
+        <Grid columns={2} relaxed="very" stackable>
+          <Grid.Column width={3}>
+            <div style={{ marginTop: "22rem", position: "fixed" }}>
+              <Sidebar
+                manufacture={this.manufactureFilter}
+                style={this.styleFilter}
+                size={this.sizeFilter}
+                gender={this.genderFilter}
+                age={this.ageFilter}
+              />
+            </div>
+          </Grid.Column>
+          <Grid.Column width={10}>
+            <StyleList
+              handleClick={this.handleClick}
+              shirts={this.state.forFilter}
+            />
+          </Grid.Column>
+        </Grid>
       </Fragment>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./Navbar";
-import { Button, Card, Form } from "semantic-ui-react";
+import { Button, Card, Form, Grid, Image } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 const JWT = require("jsonwebtoken");
@@ -25,6 +25,15 @@ class EditQuotePage extends Component {
 
   state = {
     quote: null
+  };
+
+  statusChangeHandler = ev => {
+    this.setState({
+      quote: {
+        ...this.state.quote,
+        status: ev.target.innerText
+      }
+    });
   };
 
   changeHandler = ev => {
@@ -161,7 +170,6 @@ class EditQuotePage extends Component {
   }
 
   render() {
-    console.log(this.state.quote);
     return (
       <Fragment>
         <Navbar />
@@ -175,142 +183,176 @@ class EditQuotePage extends Component {
             return (
               <Fragment>
                 <main style={{ marginLeft: "4em" }}>
-                  <div className="quote-form">
-                    <Form>
-                      <Form.Group grouped>
-                        <Form.Input
-                          label="Full Name"
-                          width={5}
-                          name="full_name"
-                          value={this.state.quote.full_name}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          label="Organization Name"
-                          width={5}
-                          name="org_name"
-                          value={this.state.quote.org_name}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          label="Address 1"
-                          width={5}
-                          name="add_one"
-                          value={this.state.quote.add_one}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          label="Address 2"
-                          width={5}
-                          name="add_two"
-                          value={this.state.quote.add_two}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          label="City"
-                          width={5}
-                          name="city"
-                          value={this.state.quote.city}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          label="State"
-                          width={5}
-                          name="state"
-                          value={this.state.quote.state}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          label="Zip Code"
-                          width={5}
-                          name="zipcode"
-                          value={this.state.quote.zipcode}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          label="Country"
-                          width={5}
-                          name="country"
-                          value={this.state.quote.country}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.Input
-                          type="email"
-                          label="Email Address"
-                          width={5}
-                          name="email"
-                          value={this.state.quote.email}
-                          onChange={this.changeHandler}
-                        />
-                        {this.props.isAdmin ? (
-                          <Form.Dropdown
-                            label="Select Status for Customer"
-                            selection
-                            placeholder="Select Status"
-                            options={dropDownStatus}
-                            width={5}
-                          />
-                        ) : null}
-                        <Form.Input
-                          readOnly
-                          label="Logo/Image Upload"
-                          width={5}
-                          value={
-                            this.state.quote.image_url.length +
-                            " Image(s) selected"
-                          }
-                        />
-                        <Form.Button
-                          positive
-                          width={5}
-                          className="upload-button"
-                          attached
-                          icon="upload"
-                          content="Upload Images/Logo"
-                          onClick={this.openWidget}
-                        />
-                        <Form.TextArea
-                          label="Sizes"
-                          placeholder="Please list all sizes and quantities needed! Adult and Youth sizes are available in most styles!  Additional fees may apply to sizes 2XL and up."
-                          name="sizes"
-                          width={6}
-                          value={this.state.quote.sizes}
-                          onChange={this.changeHandler}
-                        />
-                        <Form.TextArea
-                          label="Additional Notes"
-                          placeholder="Specific brand, additional print locations Etc.."
-                          name="notes"
-                          width={6}
-                          value={this.state.quote.notes}
-                          onChange={this.changeHandler}
-                        />
-                        <Button primary onClick={this.submitHandler}>
-                          Edit Your Quote!
-                        </Button>
-                      </Form.Group>
-                    </Form>
-                    <Card.Group itemsPerRow={3}>
-                      {this.state.quote.image_url.map(image => (
-                        <Fragment>
-                          <div>
-                            <img
-                              style={{ width: "25%" }}
-                              alt="Quote File Attachment"
-                              src={image}
-                            />
-                          </div>
-                          <Button
-                            type="button"
-                            onClick={() => this.removePhoto(image)}
-                            attached
-                          >
-                            Remove Attachment
-                          </Button>
-                        </Fragment>
-                      ))}
-                    </Card.Group>
-                  </div>
+                  <Grid centered columns={4}>
+                    <Grid.Row>
+                      <Grid.Column width={6}>
+                        <Card.Group itemsPerRow={3}>
+                          {this.state.quote.image_url.map(image => (
+                            <Fragment>
+                              <Card>
+                                <Image
+                                  src={image}
+                                  href={image}
+                                  target="_blank"
+                                />
+                                <Card.Content extra>
+                                  <div className="ui center aligned">
+                                    <Button
+                                      basic
+                                      color="red"
+                                      onClick={() => this.removePhoto(image)}
+                                    >
+                                      Delete Image
+                                    </Button>
+                                  </div>
+                                </Card.Content>
+                              </Card>
+                            </Fragment>
+                          ))}
+                        </Card.Group>
+                      </Grid.Column>
+
+                      <Grid.Column width={6}>
+                        <div>
+                          <Form>
+                            <Form.Group grouped>
+                              <Form.Input
+                                label="Full Name"
+                                width={16}
+                                name="full_name"
+                                value={this.state.quote.full_name}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                label="Organization Name"
+                                width={16}
+                                name="org_name"
+                                value={this.state.quote.org_name}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                label="Address 1"
+                                width={16}
+                                name="add_one"
+                                value={this.state.quote.add_one}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                label="Address 2"
+                                width={16}
+                                name="add_two"
+                                value={this.state.quote.add_two}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                label="City"
+                                width={16}
+                                name="city"
+                                value={this.state.quote.city}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                label="State"
+                                width={16}
+                                name="state"
+                                value={this.state.quote.state}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                label="Zip Code"
+                                width={16}
+                                name="zipcode"
+                                value={this.state.quote.zipcode}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                label="Country"
+                                width={16}
+                                name="country"
+                                value={this.state.quote.country}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Input
+                                type="email"
+                                label="Email Address"
+                                width={16}
+                                name="email"
+                                value={this.state.quote.email}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              {this.props.isAdmin ? (
+                                <Form.Dropdown
+                                  label="Select Status for Customer"
+                                  selection
+                                  placeholder="Select Status"
+                                  options={dropDownStatus}
+                                  onChange={this.statusChangeHandler}
+                                  width={16}
+                                />
+                              ) : null}
+                              <Form.Input
+                                readOnly
+                                label="Logo/Image Upload"
+                                width={16}
+                                value={
+                                  this.state.quote.image_url.length +
+                                  " Image(s) selected"
+                                }
+                              />
+                              <Form.Button
+                                positive
+                                width={16}
+                                className="upload-button"
+                                attached
+                                disabled={this.props.isAdmin ? true : false}
+                                icon="upload"
+                                content="Upload Images/Logo"
+                                onClick={this.openWidget}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.TextArea
+                                label="Sizes"
+                                placeholder="Please list all sizes and quantities needed! Adult and Youth sizes are available in most styles!  Additional fees may apply to sizes 2XL and up."
+                                name="sizes"
+                                width={16}
+                                value={this.state.quote.sizes}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.TextArea
+                                label="Additional Notes"
+                                placeholder="Specific brand, additional print locations Etc.."
+                                name="notes"
+                                width={16}
+                                value={this.state.quote.notes}
+                                onChange={this.changeHandler}
+                                readOnly={this.props.isAdmin ? true : false}
+                              />
+                              <Form.Button
+                                primary
+                                attached
+                                width={16}
+                                onClick={this.submitHandler}
+                              >
+                                {this.props.isAdmin
+                                  ? "Edit Customer Quote!"
+                                  : "Edit Your Quote!"}
+                              </Form.Button>
+                            </Form.Group>
+                          </Form>
+                        </div>
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
                 </main>
               </Fragment>
             );

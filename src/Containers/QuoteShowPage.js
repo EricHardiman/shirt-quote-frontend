@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, Card, Modal } from "semantic-ui-react";
+import { Button, Card, Modal, Grid, Image } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -23,7 +23,12 @@ class QuoteShowPage extends Component {
         authorization: token
       }
     });
-    this.setState({ open: false }, this.props.history.push("/quotes"));
+    this.setState(
+      { open: false },
+      this.props.isAdmin
+        ? this.props.history.push("/all_quotes")
+        : this.props.history.push("/quotes")
+    );
   };
 
   close = () => this.setState({ open: false });
@@ -44,8 +49,8 @@ class QuoteShowPage extends Component {
   };
 
   render() {
+    console.log(this.state.quote);
     const { open, closeOnEscape, closeOnDimmerClick } = this.state;
-    console.log("THIS IS IN THE QUOTE SHOW PAGE", this.state.quote);
     return (
       <Fragment>
         <Navbar />
@@ -58,55 +63,113 @@ class QuoteShowPage extends Component {
           ) {
             return (
               <Fragment>
-                <h1>{this.state.quote.shirt_type}</h1>
-                <h2>{this.state.quote.color}</h2>
-                <h1>Attached Files</h1>
-                <Card.Group itemsPerRow={6}>
-                  {this.state.quote.images.map(image => (
-                    <Card raised image={image.url} />
-                  ))}
-                </Card.Group>
-                <Button
-                  color="blue"
-                  onClick={() =>
-                    this.props.history.push(
-                      `/quotes/${this.state.quote.quote_number}/edit`
-                    )
-                  }
-                >
-                  Edit Quote
-                </Button>
-                {/*Modal*/}
-                <Button negative onClick={this.closeConfigShow(true, false)}>
-                  Delete Quote
-                </Button>
+                <Grid centered columns={4}>
+                  <Grid.Row>
+                    <Grid.Column width={3}>
+                      <Image src={this.state.quote.front} />
+                    </Grid.Column>
+                    <Grid.Column width={5}>
+                      <h3>
+                        {this.state.quote.shirt_type} in{" "}
+                        {this.state.quote.color}
+                      </h3>
+                      <h3>Contact Info:</h3>
+                      {this.state.quote.org_name !== "" ? (
+                        <p>{this.state.quote.org_name}</p>
+                      ) : null}
+                      <p>{this.state.quote.full_name}</p>
+                      <p>{this.state.quote.add_one}</p>
+                      {this.state.quote.add_two !== "" ? (
+                        <p>{this.state.quote.add_two}</p>
+                      ) : null}
+                      <p>
+                        {this.state.quote.city}, {this.state.quote.state}
+                      </p>
+                      <p>{this.state.quote.country}</p>
+                      <p>{this.state.quote.email}</p>
+                      <h3>Sizes Chosen:</h3>
+                      <p>{this.state.quote.sizes}</p>
+                      <h3>Additional Notes:</h3>
+                      <p>
+                        {this.state.quote.notes !== ""
+                          ? this.state.quote.notes
+                          : "No Additional Notes Given."}
+                      </p>
+                      <h3>
+                        Quote Reference Number:{" "}
+                        <u>{this.state.quote.quote_number}</u>
+                      </h3>
+                    </Grid.Column>
+                  </Grid.Row>
 
-                <Modal
-                  open={open}
-                  closeOnEscape={closeOnEscape}
-                  closeOnDimmerClick={closeOnDimmerClick}
-                  onClose={this.close}
-                >
-                  <Modal.Header>
-                    Delete {this.state.quote.shirt_type}?
-                  </Modal.Header>
-                  <Modal.Content>
-                    <p>Are you sure you want to delete this quote?</p>
-                  </Modal.Content>
-                  <Modal.Actions>
-                    <Button onClick={this.close} negative>
-                      No
-                    </Button>
-                    <Button
-                      onClick={this.deleteHandler}
-                      positive
-                      labelPosition="right"
-                      icon="checkmark"
-                      content="Yes"
-                    />
-                  </Modal.Actions>
-                </Modal>
-                {/*Modal*/}
+                  <Grid.Row>
+                    <Grid.Column width={3}>
+                      <Image src={this.state.quote.back} />
+                    </Grid.Column>
+                    <Grid.Column width={5}>
+                      <h2>Attached Files</h2>
+                      <Card.Group itemsPerRow={3}>
+                        {this.state.quote.images.map(image => (
+                          <Card
+                            raised
+                            href={image.url}
+                            target="_blank"
+                            image={image.url}
+                          />
+                        ))}
+                      </Card.Group>
+                      <p> </p>
+                      {this.state.quote.status !== "Pending" ? null : (
+                        <Fragment>
+                          <Button
+                            color="blue"
+                            onClick={() =>
+                              this.props.history.push(
+                                `/quotes/${this.state.quote.quote_number}/edit`
+                              )
+                            }
+                          >
+                            Edit Quote
+                          </Button>
+
+                          <Button
+                            negative
+                            onClick={this.closeConfigShow(true, false)}
+                          >
+                            Delete Quote
+                          </Button>
+                        </Fragment>
+                      )}
+                    </Grid.Column>
+                  </Grid.Row>
+                  {/*Modal*/}
+                  <Modal
+                    open={open}
+                    closeOnEscape={closeOnEscape}
+                    closeOnDimmerClick={closeOnDimmerClick}
+                    onClose={this.close}
+                  >
+                    <Modal.Header>
+                      Delete {this.state.quote.shirt_type}?
+                    </Modal.Header>
+                    <Modal.Content>
+                      <p>Are you sure you want to delete this quote?</p>
+                    </Modal.Content>
+                    <Modal.Actions>
+                      <Button onClick={this.close} negative>
+                        No
+                      </Button>
+                      <Button
+                        onClick={this.deleteHandler}
+                        positive
+                        labelPosition="right"
+                        icon="checkmark"
+                        content="Yes"
+                      />
+                    </Modal.Actions>
+                  </Modal>
+                  {/*Modal*/}
+                </Grid>
               </Fragment>
             );
           } else {

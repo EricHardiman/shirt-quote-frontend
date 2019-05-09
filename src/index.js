@@ -5,7 +5,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import "semantic-ui/dist/semantic.min.css";
+import "semantic-ui-css/semantic.min.css";
 import { ActionCableProvider } from "react-actioncable-provider";
 require("dotenv").config();
 

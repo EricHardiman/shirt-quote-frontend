@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, Form, Card } from "semantic-ui-react";
+import { Button, Form } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Navbar from "./Navbar";
@@ -38,11 +38,12 @@ class QuotePage extends Component {
 
   componentDidUpdate(prevProps) {
     const { selectedShirt } = this.props;
+    console.log(selectedShirt);
     if (prevProps.selectedShirt !== selectedShirt) {
       this.setState({
         front: selectedShirt.front,
         back: selectedShirt.back,
-        color: selectedShirt.color,
+        color: selectedShirt.starting_color,
         shirt_type: selectedShirt.name
       });
     }
@@ -106,7 +107,6 @@ class QuotePage extends Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <Fragment>
         <Navbar />
@@ -116,56 +116,56 @@ class QuotePage extends Component {
               <Form.Group grouped>
                 <Form.Input
                   label="Full Name"
-                  width={5}
+                  width={12}
                   name="full_name"
                   value={this.state.full_name}
                   onChange={this.changeHandler}
                 />
                 <Form.Input
                   label="Organization Name"
-                  width={5}
+                  width={12}
                   name="org_name"
                   value={this.state.org_name}
                   onChange={this.changeHandler}
                 />
                 <Form.Input
                   label="Address 1"
-                  width={5}
+                  width={12}
                   name="add_one"
                   value={this.state.add_one}
                   onChange={this.changeHandler}
                 />
                 <Form.Input
                   label="Address 2"
-                  width={5}
+                  width={12}
                   name="add_two"
                   value={this.state.add_two}
                   onChange={this.changeHandler}
                 />
                 <Form.Input
                   label="City"
-                  width={5}
+                  width={12}
                   name="city"
                   value={this.state.city}
                   onChange={this.changeHandler}
                 />
                 <Form.Input
                   label="State"
-                  width={5}
+                  width={12}
                   name="state"
                   value={this.state.state}
                   onChange={this.changeHandler}
                 />
                 <Form.Input
                   label="Zip Code"
-                  width={5}
+                  width={12}
                   name="zipcode"
                   value={this.state.zipcode}
                   onChange={this.changeHandler}
                 />
                 <Form.Input
                   label="Country"
-                  width={5}
+                  width={12}
                   name="country"
                   value={this.state.country}
                   onChange={this.changeHandler}
@@ -173,7 +173,7 @@ class QuotePage extends Component {
                 <Form.Input
                   type="email"
                   label="Email Address"
-                  width={5}
+                  width={12}
                   name="email"
                   value={this.state.email}
                   onChange={this.changeHandler}
@@ -181,14 +181,14 @@ class QuotePage extends Component {
                 <Form.Input
                   readOnly
                   label="Logo/Image Upload"
-                  width={5}
+                  width={12}
                   value={this.state.images.length + " Image(s) selected"}
                 />
                 <Form.Button
                   positive
                   className="upload-button"
                   attached
-                  width={5}
+                  width={12}
                   icon="upload"
                   content="Upload Images/Logo"
                   onClick={this.openWidget}
@@ -197,7 +197,7 @@ class QuotePage extends Component {
                   label="Sizes"
                   placeholder="Please list all sizes and quantities needed! Adult and Youth sizes are available in most styles!  Additional fees may apply to sizes 2XL and up."
                   name="sizes"
-                  width={6}
+                  width={12}
                   value={this.state.sizes}
                   onChange={this.changeHandler}
                 />
@@ -205,7 +205,7 @@ class QuotePage extends Component {
                   label="Additional Notes"
                   placeholder="Specific brand, additional print locations Etc.."
                   name="notes"
-                  width={6}
+                  width={12}
                   value={this.state.notes}
                   onChange={this.changeHandler}
                 />
@@ -214,19 +214,6 @@ class QuotePage extends Component {
                 </Button>
               </Form.Group>
             </Form>
-            <Card.Group itemsPerRow={3}>
-              {this.state.images.map(image => (
-                <Fragment>
-                  <div>
-                    <img
-                      style={{ width: "50%" }}
-                      alt="Quote File Attachment"
-                      src={image}
-                    />
-                  </div>
-                </Fragment>
-              ))}
-            </Card.Group>
           </div>
         </main>
       </Fragment>

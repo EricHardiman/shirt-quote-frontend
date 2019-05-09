@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Navbar from "./Navbar";
 import AllQuotesList from "../components/AllQuotesList-Admin";
+import { Card } from "semantic-ui-react";
 
 class AllQuotes extends Component {
   state = {
@@ -23,12 +24,14 @@ class AllQuotes extends Component {
   render() {
     if (!this.props.isAdmin) {
       return <Redirect to={"/"} />;
-    } else {
+    } else if (this.props.isAdmin) {
       return (
         <Fragment>
           <Navbar />
-          <h1>Admin All Quotes Show</h1>
-          <AllQuotesList quotes={this.state.allQuotes} />
+          <h1 style={{}}>All Quotes Show</h1>
+          <Card.Group itemsPerRow={6}>
+            <AllQuotesList quotes={this.state.allQuotes} />
+          </Card.Group>
         </Fragment>
       );
     }
