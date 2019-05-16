@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
-import { withRouter, Link } from "react-router-dom";
-import { Modal, Button, Menu, Header } from "semantic-ui-react";
+import { withRouter } from "react-router-dom";
+import { Modal, Button, Menu } from "semantic-ui-react";
 import { connect } from "react-redux";
 
 const JWT = require("jsonwebtoken");
@@ -131,12 +131,12 @@ class NavbarRight extends Component {
               ) : (
                 <h4>
                   Live Chat Available!{" "}
-                  <a
+                  <p
                     style={{ cursor: "pointer", color: "green" }}
                     onClick={this.clickHandler}
                   >
                     <u>Click Here</u>
-                  </a>{" "}
+                  </p>{" "}
                   to start a chat.
                 </h4>
               )}

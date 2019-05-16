@@ -22,10 +22,10 @@ const UserQuotes = props => {
           <Card.Description>{props.quote.notes}</Card.Description>
         </Card.Content>
         <Card.Content extra>
-          <a>
+          <p>
             <Icon name="camera" />
             {props.quote.images.length} Attachments Uploaded
-          </a>
+          </p>
         </Card.Content>
       </Card>
     </Fragment>

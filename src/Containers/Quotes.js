@@ -24,7 +24,7 @@ class Quotes extends Component {
         }
       })
         .then(res => res.json())
-        .then(data => this.setState({ quotes: data }));
+        .then(data => this.setState({ quotes: data }, console.log(data)));
     }
   }
 

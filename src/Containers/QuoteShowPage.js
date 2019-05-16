@@ -22,13 +22,16 @@ class QuoteShowPage extends Component {
       headers: {
         authorization: token
       }
-    });
-    this.setState(
-      { open: false },
-      this.props.isAdmin
-        ? this.props.history.push("/all_quotes")
-        : this.props.history.push("/quotes")
-    );
+    })
+      .then(res => res.json())
+      .then(data => {
+        this.setState(
+          { open: false },
+          this.props.isAdmin
+            ? this.props.history.push("/all_quotes")
+            : this.props.history.push("/quotes")
+        );
+      });
   };
 
   close = () => this.setState({ open: false });
@@ -119,7 +122,7 @@ class QuoteShowPage extends Component {
                         ))}
                       </Card.Group>
                       <p> </p>
-                      {this.state.quote.status !== "Pending" ? null : (
+                      {/* {this.state.quote.status !== "Pending" ? null : (
                         <Fragment>
                           <Button
                             color="blue"
@@ -139,7 +142,29 @@ class QuoteShowPage extends Component {
                             Delete Quote
                           </Button>
                         </Fragment>
-                      )}
+                      )} */}
+                      {this.props.isAdmin ||
+                      this.state.quote.status === "Pending" ? (
+                        <Fragment>
+                          <Button
+                            color="blue"
+                            onClick={() =>
+                              this.props.history.push(
+                                `/quotes/${this.state.quote.quote_number}/edit`
+                              )
+                            }
+                          >
+                            Edit Quote
+                          </Button>
+
+                          <Button
+                            negative
+                            onClick={this.closeConfigShow(true, false)}
+                          >
+                            Delete Quote
+                          </Button>
+                        </Fragment>
+                      ) : null}
                     </Grid.Column>
                   </Grid.Row>
                   {/*Modal*/}

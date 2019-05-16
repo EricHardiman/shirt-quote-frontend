@@ -28,7 +28,7 @@ class AllQuotes extends Component {
       return (
         <Fragment>
           <Navbar />
-          <h1 style={{}}>All Quotes Show</h1>
+          <h1 style={{}}>All Customer's Quotes</h1>
           <Card.Group itemsPerRow={6}>
             <AllQuotesList quotes={this.state.allQuotes} />
           </Card.Group>
